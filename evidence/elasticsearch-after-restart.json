@@ -1,0 +1,38 @@
+{
+  "took": 2,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 1,
+      "relation": "eq"
+    },
+    "max_score": 0.0,
+    "hits": [
+      {
+        "_index": "node-app-2026.10.17",
+        "_id": "ISggSaEBRRHRoxBGgqxl",
+        "_score": 0.0,
+        "_source": {
+          "container_id": "0ecf8ff7fe164b18e86a98585c021e2f1e0ee0df3e44016e474407f82399e9a1",
+          "container_name": "/hw26-efk-app-1",
+          "source": "stdout",
+          "log": "{\"level\":\"info\",\"marker\":\"HW26-20261017T090242Z-e83c794e-restart\",\"message\":\"Home route accessed\",\"path\":\"/\",\"service\":\"node-app\",\"timestamp\":\"2026-10-17T09:10:27.083Z\"}",
+          "level": "info",
+          "marker": "HW26-20261017T090242Z-e83c794e-restart",
+          "message": "Home route accessed",
+          "path": "/",
+          "service": "node-app",
+          "timestamp": "2026-10-17T09:10:27.083Z",
+          "@timestamp": "2026-10-17T09:10:27.083000000+00:00",
+          "docker_tag": "docker.node-app"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,153 @@
+name: hw26-efk
+services:
+  app:
+    build:
+      context: /home/morphes/Стільниця/DAN_IT/HW26_Monitoring_logging
+      dockerfile: Dockerfile
+    depends_on:
+      fluentd:
+        condition: service_healthy
+        required: true
+    environment:
+      PORT: "10000"
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - const s=require('net').connect(10000,'127.0.0.1',()=>{s.end();process.exit(0)});s.on('error',()=>process.exit(1));setTimeout(()=>process.exit(1),2000)
+      timeout: 3s
+      interval: 10s
+      retries: 6
+    image: hw26-node-app:1.0.0
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+        fluentd-async: "true"
+        fluentd-async-reconnect-interval: 1s
+        fluentd-buffer-limit: "16384"
+        fluentd-max-retries: "2147483647"
+        fluentd-retry-wait: 1s
+        fluentd-sub-second-precision: "true"
+        fluentd-write-timeout: 3s
+        tag: docker.node-app
+    mem_limit: "268435456"
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        host_ip: 127.0.0.1
+        target: 10000
+        published: "10000"
+        protocol: tcp
+    restart: unless-stopped
+  elasticsearch:
+    environment:
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      discovery.type: single-node
+      xpack.ml.enabled: "false"
+      xpack.security.enabled: "false"
+      xpack.security.enrollment.enabled: "false"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - curl -fsS 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s'
+          >/dev/null
+      timeout: 6s
+      interval: 10s
+      retries: 30
+      start_period: 30s
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.19.23
+    mem_limit: "1610612736"
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        host_ip: 127.0.0.1
+        target: 9200
+        published: "9200"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: es-data
+        target: /usr/share/elasticsearch/data
+        volume: {}
+  fluentd:
+    build:
+      context: /home/morphes/Стільниця/DAN_IT/HW26_Monitoring_logging/fluentd
+      dockerfile: Dockerfile
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+        required: true
+    healthcheck:
+      test:
+        - CMD
+        - ruby
+        - -rnet/http
+        - -e
+        - 'exit(Net::HTTP.get_response(URI(''http://127.0.0.1:24220/api/plugins.json'')).is_a?(Net::HTTPSuccess)
+          ? 0 : 1)'
+      timeout: 5s
+      interval: 10s
+      retries: 12
+    image: hw26-fluentd:1.18.0-es5.4.3
+    logging:
+      driver: local
+      options:
+        max-file: "3"
+        max-size: 10m
+    mem_limit: "402653184"
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        host_ip: 127.0.0.1
+        target: 24224
+        published: "24224"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: fluentd-buffer
+        target: /fluentd/log
+        volume: {}
+  kibana:
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+        required: true
+    environment:
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+      NODE_OPTIONS: --max-old-space-size=768
+      TELEMETRY_ENABLED: "false"
+      XPACK_SECURITY_ENABLED: "false"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - curl -fsS http://localhost:5601/api/status >/dev/null
+      timeout: 5s
+      interval: 10s
+      retries: 30
+      start_period: 1m0s
+    image: docker.elastic.co/kibana/kibana:8.19.23
+    mem_limit: "1610612736"
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        host_ip: 127.0.0.1
+        target: 5601
+        published: "5601"
+        protocol: tcp
+    restart: unless-stopped
+networks:
+  default:
+    name: hw26-efk_default
+volumes:
+  es-data:
+    name: hw26-efk_es-data
+  fluentd-buffer:
+    name: hw26-efk_fluentd-buffer

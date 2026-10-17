@@ -1,0 +1,57 @@
+{
+  "took" : 10,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 2,
+      "relation" : "eq"
+    },
+    "max_score" : 0.75030553,
+    "hits" : [
+      {
+        "_index" : "node-app-2026.10.17",
+        "_id" : "hOMZSaEBZ67JO60xaTTa",
+        "_score" : 0.75030553,
+        "_source" : {
+          "source" : "stdout",
+          "log" : "{\"level\":\"info\",\"marker\":\"HW26-20261017T090242Z-e83c794e\",\"message\":\"Home route accessed\",\"path\":\"/\",\"service\":\"node-app\",\"timestamp\":\"2026-10-17T09:02:42.159Z\"}",
+          "container_id" : "dad39915b656294c30ab36dfc190d5c98d2fbbd1a98516f124a070a4d0998eec",
+          "container_name" : "/hw26-efk-app-1",
+          "level" : "info",
+          "marker" : "HW26-20261017T090242Z-e83c794e",
+          "message" : "Home route accessed",
+          "path" : "/",
+          "service" : "node-app",
+          "timestamp" : "2026-10-17T09:02:42.159Z",
+          "@timestamp" : "2026-10-17T09:02:42.159000000+00:00",
+          "docker_tag" : "docker.node-app"
+        }
+      },
+      {
+        "_index" : "node-app-2026.10.17",
+        "_id" : "heMZSaEBZ67JO60xaTTa",
+        "_score" : 0.75030553,
+        "_source" : {
+          "container_id" : "dad39915b656294c30ab36dfc190d5c98d2fbbd1a98516f124a070a4d0998eec",
+          "container_name" : "/hw26-efk-app-1",
+          "source" : "stdout",
+          "log" : "{\"level\":\"error\",\"marker\":\"HW26-20261017T090242Z-e83c794e\",\"message\":\"An error occurred with NodeJS!\",\"path\":\"/error\",\"service\":\"node-app\",\"timestamp\":\"2026-10-17T09:02:42.164Z\"}",
+          "level" : "error",
+          "marker" : "HW26-20261017T090242Z-e83c794e",
+          "message" : "An error occurred with NodeJS!",
+          "path" : "/error",
+          "service" : "node-app",
+          "timestamp" : "2026-10-17T09:02:42.164Z",
+          "@timestamp" : "2026-10-17T09:02:42.164000000+00:00",
+          "docker_tag" : "docker.node-app"
+        }
+      }
+    ]
+  }
+}

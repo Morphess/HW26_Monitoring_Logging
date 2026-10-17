@@ -1,0 +1,5 @@
+NAME                       IMAGE                                                   COMMAND                  SERVICE         CREATED         STATUS                   PORTS
+hw26-efk-app-1             hw26-node-app:1.0.0                                     "docker-entrypoint.s…"   app             4 minutes ago   Up 3 minutes (healthy)   127.0.0.1:10000->10000/tcp
+hw26-efk-elasticsearch-1   docker.elastic.co/elasticsearch/elasticsearch:8.19.23   "/bin/tini -- /usr/l…"   elasticsearch   4 minutes ago   Up 4 minutes (healthy)   127.0.0.1:9200->9200/tcp, 9300/tcp
+hw26-efk-fluentd-1         hw26-fluentd:1.18.0-es5.4.3                             "tini -- /bin/entryp…"   fluentd         4 minutes ago   Up 3 minutes (healthy)   5140/tcp, 127.0.0.1:24224->24224/tcp
+hw26-efk-kibana-1          docker.elastic.co/kibana/kibana:8.19.23                 "/bin/tini -- /usr/l…"   kibana          4 minutes ago   Up 3 minutes (healthy)   127.0.0.1:5601->5601/tcp
