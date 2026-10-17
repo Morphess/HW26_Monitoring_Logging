@@ -1,5 +1,0 @@
-NAME                       SERVICE         STATUS                        PORTS
-hw26-efk-app-1             app             Up 57 seconds (healthy)       127.0.0.1:10000->10000/tcp
-hw26-efk-elasticsearch-1   elasticsearch   Up About a minute (healthy)   127.0.0.1:9200->9200/tcp, 9300/tcp
-hw26-efk-fluentd-1         fluentd         Up About a minute (healthy)   5140/tcp, 127.0.0.1:24224->24224/tcp
-hw26-efk-kibana-1          kibana          Up About a minute (healthy)   127.0.0.1:5601->5601/tcp
